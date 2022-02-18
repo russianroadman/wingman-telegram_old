@@ -5,6 +5,9 @@ import java.util.Date;
 import java.util.UUID;
 
 @Entity
+@Table(indexes = {
+    @Index(name = "idx_message_issue_id", columnList = "issue_id, created_by_id")
+})
 public class Message {
 
     @Id
