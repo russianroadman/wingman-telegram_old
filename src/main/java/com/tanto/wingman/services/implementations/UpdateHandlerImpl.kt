@@ -68,8 +68,13 @@ class UpdateHandlerImpl(
         val originalMessageId = update.message.messageId
 
         val forwardMessage = sendMessageService.getForwardMessage(forwardChatId, originalChatId.toString(), originalMessageId)
+        val userResponse = sendMessageService.getSendMessage(
+            update.message.chatId.toString(),
+            "Message forwarded to ${admin.name} ${admin.surname}"
+        )
 
         messageSender.forward(sender, forwardMessage)
+        messageSender.send(sender, userResponse)
 
     }
 
