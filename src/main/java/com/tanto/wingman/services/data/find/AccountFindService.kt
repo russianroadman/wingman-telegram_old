@@ -38,4 +38,8 @@ interface AccountFindService {
 
     fun findByDepartmentId(id: UUID, graph: EntityGraph<Account>): Set<Account>
 
+    fun findByChatId(chatId: String): Account
+
+    fun findByChatId(chatId: String, graph: EntityGraph<Account>): Account
+
 }

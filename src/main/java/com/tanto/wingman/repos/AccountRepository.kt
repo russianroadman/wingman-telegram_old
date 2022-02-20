@@ -8,4 +8,6 @@ interface AccountRepository : JpaRepository<Account, UUID> {
 
     fun findByLogin(login: String): Account
 
+    fun findByChatId(chatId: String): Account
+
 }

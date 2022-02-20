@@ -75,4 +75,13 @@ class AccountFindServiceImpl(
     override fun findByDepartmentId(id: UUID, graph: EntityGraph<Account>): Set<Account> {
         TODO("Not yet implemented")
     }
+
+    override fun findByChatId(chatId: String): Account {
+        return repo.findByChatId(chatId)
+    }
+
+    override fun findByChatId(chatId: String, graph: EntityGraph<Account>): Account {
+        TODO("Not yet implemented")
+    }
+
 }

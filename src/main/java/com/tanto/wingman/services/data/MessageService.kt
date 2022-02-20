@@ -5,6 +5,6 @@ import java.util.*
 
 interface MessageService {
 
-    fun saveMessageFromTelegram(message: Message, issueId: UUID, createdById: UUID): com.tanto.wingman.data.entities.Message
+    fun saveMessageFromTelegram(message: Message, issueId: UUID): com.tanto.wingman.data.entities.Message
 
 }

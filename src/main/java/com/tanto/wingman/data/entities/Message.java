@@ -30,7 +30,7 @@ public class Message {
     private String chatId;
 
     @Column(nullable = false, updatable = false)
-    private Integer messageId;
+    private Integer telegramMessageId;
 
     public UUID getId() {
         return id;
@@ -68,11 +68,11 @@ public class Message {
         this.chatId = chatId;
     }
 
-    public Integer getMessageId() {
-        return messageId;
+    public Integer getTelegramMessageId() {
+        return telegramMessageId;
     }
 
-    public void setMessageId(Integer messageId) {
-        this.messageId = messageId;
+    public void setTelegramMessageId(Integer messageId) {
+        this.telegramMessageId = messageId;
     }
 }

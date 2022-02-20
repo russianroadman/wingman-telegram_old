@@ -17,16 +17,17 @@ class MessageServiceImpl(
     private val accountFindService: AccountFindService
 ) : MessageService {
 
-    override fun saveMessageFromTelegram(message: Message, issueId: UUID, createdById: UUID): com.tanto.wingman.data.entities.Message {
+    override fun saveMessageFromTelegram(message: Message, issueId: UUID): com.tanto.wingman.data.entities.Message {
 
         val msg = com.tanto.wingman.data.entities.Message()
+        val createdBy = accountFindService.findByChatId(message.chatId.toString())
 
         msg.issue = issueFindService.findById(issueId)
-        msg.createdBy = accountFindService.findById(createdById)
+        msg.createdBy = accountFindService.findById(createdBy.id)
         val instant = Instant.ofEpochSecond(message.date.toLong())
         msg.createdAt = Date.from(instant)
         msg.chatId = message.chatId.toString()
-        msg.messageId = message.messageId
+        msg.telegramMessageId = message.messageId
 
         return repo.save(msg)
 

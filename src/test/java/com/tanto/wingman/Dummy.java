@@ -20,4 +20,17 @@ public class Dummy {
         Assertions.assertEquals(1, 3);
     }
 
+    @Test
+    public void forTest(){
+
+        int c = 2;
+
+        for ( c++ ; true ; );
+
+    }
+
+    private void lol(){
+        if(true){}
+    }
+
 }
