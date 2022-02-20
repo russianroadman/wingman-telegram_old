@@ -26,6 +26,12 @@ public class Message {
     @Column(nullable = false, updatable = false)
     private Date createdAt;
 
+    @Column(nullable = false, updatable = false)
+    private String chatId;
+
+    @Column(nullable = false, updatable = false)
+    private Integer messageId;
+
     public UUID getId() {
         return id;
     }
@@ -54,4 +60,19 @@ public class Message {
         this.createdAt = createdAt;
     }
 
+    public String getChatId() {
+        return chatId;
+    }
+
+    public void setChatId(String chatId) {
+        this.chatId = chatId;
+    }
+
+    public Integer getMessageId() {
+        return messageId;
+    }
+
+    public void setMessageId(Integer messageId) {
+        this.messageId = messageId;
+    }
 }

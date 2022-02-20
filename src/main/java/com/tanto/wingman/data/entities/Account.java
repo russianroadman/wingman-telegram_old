@@ -27,6 +27,9 @@ public class Account {
     @Column(nullable = false)
     private String passwordHash;
 
+    @Column(nullable = false, unique = true)
+    private String chatId;
+
     @Column
     @ManyToMany(fetch = FetchType.LAZY)
     private Set<Department> departments;
@@ -81,5 +84,13 @@ public class Account {
 
     public void setDepartments(Set<Department> departments) {
         this.departments = departments;
+    }
+
+    public String getChatId() {
+        return chatId;
+    }
+
+    public void setChatId(String chatId) {
+        this.chatId = chatId;
     }
 }
