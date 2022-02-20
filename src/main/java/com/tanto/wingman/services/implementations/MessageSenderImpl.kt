@@ -2,6 +2,7 @@ package com.tanto.wingman.services.implementations
 
 import com.tanto.wingman.services.MessageSender
 import org.springframework.stereotype.Service
+import org.telegram.telegrambots.meta.api.methods.ForwardMessage
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.bots.AbsSender
 
@@ -10,6 +11,10 @@ class MessageSenderImpl : MessageSender {
 
     override fun send(sender: AbsSender, message: SendMessage) {
         sender.execute(message)
+    }
+
+    override fun forward(sender: AbsSender, forwardMessage: ForwardMessage) {
+        sender.execute(forwardMessage)
     }
 
 }

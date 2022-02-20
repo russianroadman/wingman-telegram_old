@@ -16,12 +16,6 @@ class BotSessionServiceImpl(
     private val session = TelegramBotsApi(DefaultBotSession::class.java).registerBot(botProvider.getBot())
     private val log = Logger.getLogger(this.javaClass.name)
 
-//    @PostConstruct
-//    private fun postConstruct(){
-//        session.stop() // Closing session to avoid 409 error in case session was already opened on another host
-//        log.info("Session was created. To open session make request to this server")
-//    }
-
     override fun startSession() {
         if (isRunning()){
             log.info("Session is already open at ${Utils.getUrl()}")

@@ -1,9 +1,10 @@
 package com.tanto.wingman.services.data
 
 import org.telegram.telegrambots.meta.api.objects.Message
+import java.util.*
 
 interface MessageService {
 
-    fun saveMessageFromTelegram(message: Message): com.tanto.wingman.data.entities.Message
+    fun saveMessageFromTelegram(message: Message, issueId: UUID, createdById: UUID): com.tanto.wingman.data.entities.Message
 
 }
