@@ -12,4 +12,24 @@ class UpdateMessageServiceImpl: UpdateMessageService {
         return update.message
     }
 
+    override fun getChatId(message: Message): String {
+        return message.chatId.toString()
+    }
+
+    override fun getSenderUsername(message: Message): String {
+        return message.from.userName
+    }
+
+    override fun getSenderFirstName(message: Message): String {
+        return message.from.firstName
+    }
+
+    override fun getMessageTextOrBlank(message: Message): String {
+        return if (message.hasText()) message.text else ""
+    }
+
+    override fun getMessageId(message: Message): Int {
+        return message.messageId
+    }
+
 }

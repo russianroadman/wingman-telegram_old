@@ -1,16 +1,20 @@
 package com.tanto.wingman.services.data.find.implementations
 
 import com.tanto.wingman.data.entities.Account
+import com.tanto.wingman.data.entities.Issue
 import com.tanto.wingman.repos.AccountRepository
 import com.tanto.wingman.services.data.find.AccountFindService
+import com.tanto.wingman.utils.GType
 import org.springframework.stereotype.Service
 import java.util.*
 import javax.persistence.EntityGraph
+import javax.persistence.EntityManager
 import javax.persistence.EntityNotFoundException
 
 @Service
 class AccountFindServiceImpl(
-    private val repo: AccountRepository
+    private val repo: AccountRepository,
+    private val em: EntityManager
 ) : AccountFindService {
     override fun findById(id: UUID): Account {
         return repo.findById(id).get()
@@ -53,19 +57,37 @@ class AccountFindServiceImpl(
     }
 
     override fun findClientAccountByIssueId(id: UUID): Account {
-        TODO("Not yet implemented")
+        return findClientAccountByIssueId(id, null)
     }
 
-    override fun findClientAccountByIssueId(id: UUID, graph: EntityGraph<Account>): Account {
-        TODO("Not yet implemented")
+    override fun findClientAccountByIssueId(id: UUID, graph: EntityGraph<Account>?): Account {
+
+        val query = em.createQuery("select c from issue i join i.client c where i.id = :id", Account::class.java)
+            .setParameter("id", id)
+
+        if (graph != null){
+            query.setHint(GType.LOAD, graph)
+        }
+
+        return query.singleResult
+
     }
 
     override fun findEmployeeAccountByIssueId(id: UUID): Account {
-        TODO("Not yet implemented")
+        return findEmployeeAccountByIssueId(id, null)
     }
 
-    override fun findEmployeeAccountByIssueId(id: UUID, graph: EntityGraph<Account>): Account {
-        TODO("Not yet implemented")
+    override fun findEmployeeAccountByIssueId(id: UUID, graph: EntityGraph<Account>?): Account {
+
+        val query = em.createQuery("select e from issue i join i.employee e where e.id = :id", Account::class.java)
+            .setParameter("id", id)
+
+        if (graph != null){
+            query.setHint(GType.LOAD, graph)
+        }
+
+        return query.singleResult
+
     }
 
     override fun findByDepartmentId(id: UUID): Set<Account> {
@@ -77,11 +99,37 @@ class AccountFindServiceImpl(
     }
 
     override fun findByChatId(chatId: String): Account {
+        return findByChatId(chatId, null)
+    }
+
+    override fun findByChatId(chatId: String, graph: EntityGraph<Account>?): Account {
         return repo.findByChatId(chatId)
     }
 
-    override fun findByChatId(chatId: String, graph: EntityGraph<Account>): Account {
-        TODO("Not yet implemented")
+    override fun isExistsByChatId(chatId: String): Boolean {
+        try {
+            findByChatId(chatId)
+        } catch (e: EntityNotFoundException){
+            return false
+        }
+        return true
+    }
+
+    override fun findByMessageId(id: UUID): Account {
+        return findByMessageId(id, null)
+    }
+
+    override fun findByMessageId(id: UUID, graph: EntityGraph<Account>?): Account {
+
+        val query = em.createQuery("select a from message m join m.createdBy a where m.id = :id", Account::class.java)
+            .setParameter("id", id)
+
+        if (graph != null){
+            query.setHint(GType.LOAD, graph)
+        }
+
+        return query.singleResult
+
     }
 
 }

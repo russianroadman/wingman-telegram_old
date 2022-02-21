@@ -28,11 +28,11 @@ interface AccountFindService {
 
     fun findClientAccountByIssueId(id: UUID): Account
 
-    fun findClientAccountByIssueId(id: UUID, graph: EntityGraph<Account>): Account
+    fun findClientAccountByIssueId(id: UUID, graph: EntityGraph<Account>?): Account
 
     fun findEmployeeAccountByIssueId(id: UUID): Account
 
-    fun findEmployeeAccountByIssueId(id: UUID, graph: EntityGraph<Account>): Account
+    fun findEmployeeAccountByIssueId(id: UUID, graph: EntityGraph<Account>?): Account
 
     fun findByDepartmentId(id: UUID): Set<Account>
 
@@ -40,6 +40,12 @@ interface AccountFindService {
 
     fun findByChatId(chatId: String): Account
 
-    fun findByChatId(chatId: String, graph: EntityGraph<Account>): Account
+    fun findByChatId(chatId: String, graph: EntityGraph<Account>?): Account
+
+    fun isExistsByChatId(chatId: String): Boolean
+
+    fun findByMessageId(id: UUID): Account
+
+    fun findByMessageId(id: UUID, graph: EntityGraph<Account>?): Account
 
 }

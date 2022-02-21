@@ -5,7 +5,8 @@ import com.tanto.wingman.services.data.MessageService
 import com.tanto.wingman.services.data.find.AccountFindService
 import com.tanto.wingman.services.data.find.IssueFindService
 import org.springframework.stereotype.Service
-import org.telegram.telegrambots.meta.api.objects.Message
+import org.telegram.telegrambots.meta.api.objects.Message as TgMessage
+import com.tanto.wingman.data.entities.Message
 import java.time.Instant
 import java.util.*
 
@@ -17,9 +18,9 @@ class MessageServiceImpl(
     private val accountFindService: AccountFindService
 ) : MessageService {
 
-    override fun saveMessageFromTelegram(message: Message, issueId: UUID): com.tanto.wingman.data.entities.Message {
+    override fun saveMessageFromTelegram(message: TgMessage, issueId: UUID): Message {
 
-        val msg = com.tanto.wingman.data.entities.Message()
+        val msg = Message()
         val createdBy = accountFindService.findByChatId(message.chatId.toString())
 
         msg.issue = issueFindService.findById(issueId)
@@ -30,6 +31,20 @@ class MessageServiceImpl(
         msg.telegramMessageId = message.messageId
 
         return repo.save(msg)
+
+    }
+
+    override fun sentFromClient(messageId: UUID): Boolean {
+
+        val issue = issueFindService.findByMessageId(messageId)
+        val messageAccount = accountFindService.findByMessageId(messageId)
+        val issueClient = accountFindService.findClientAccountByIssueId(issue.id)
+
+        if (messageAccount.id == issueClient.id){
+            return true
+        }
+
+        return false
 
     }
 

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service
 import org.telegram.telegrambots.meta.api.objects.Message
 import org.telegram.telegrambots.meta.api.objects.Update
 import org.telegram.telegrambots.meta.bots.AbsSender
+import javax.persistence.EntityNotFoundException
 
 @Service
 class UpdateHandlerImpl(
@@ -25,23 +26,46 @@ class UpdateHandlerImpl(
     override fun onUpdateReceived(update: Update, sender: AbsSender) {
 
         val message = updateMessageService.getMessage(update)
+        checkAuthorities(message, sender)
 
-        testForwarding(update, sender)
+    }
 
+    private fun checkAuthorities(message: Message, sender: AbsSender){
+        if (accountFindService.isExistsByChatId(updateMessageService.getChatId(message))){
+            handle(message, sender)
+        } else {
+            authoritiesFailed(message, sender)
+        }
+    }
+
+    private fun handle(message: Message, sender: AbsSender){
         if (messageHasCommand(message)){
             handleCommand(message)
         } else {
-            handleMessage(message)
+            handleMessage(message, sender)
         }
+    }
 
+    private fun authoritiesFailed(message: Message, sender: AbsSender){
+        log.warn(
+            "Non registered user tried to use bot - " +
+                    "chat_id: ${updateMessageService.getChatId(message)}, " +
+                    "user: ${updateMessageService.getSenderUsername(message)}, ${updateMessageService.getSenderFirstName(message)}, " +
+                    "message text: ${updateMessageService.getMessageTextOrBlank(message)}"
+        )
+        val messageToSend = sendMessageService.getSendMessage(
+            updateMessageService.getChatId(message),
+            "Вы не зарегистрированы"
+        )
+        messageSender.send(sender, messageToSend)
     }
 
     private fun handleCommand(message: Message){
         commandHandler.handle(message)
     }
 
-    private fun handleMessage(message: Message){
-        wingmanService.handleMessage(message)
+    private fun handleMessage(message: Message, sender: AbsSender){
+        wingmanService.handleMessage(message, sender)
     }
 
     private fun testSending(update: Update, sender: AbsSender){
@@ -78,16 +102,18 @@ class UpdateHandlerImpl(
         val admin = accountFindService.findByLogin("admin")
 
         val forwardChatId = admin.chatId
-        val originalChatId = message.chatId
+        val originalChatId = message.chatId.toString()
         val originalMessageId = message.messageId
 
-        val forwardMessage = sendMessageService.getForwardMessage(forwardChatId, originalChatId.toString(), originalMessageId)
+        val forwardMessage = sendMessageService.getForwardMessage(forwardChatId, originalChatId, originalMessageId)
         val userResponse = sendMessageService.getSendMessage(
             message.chatId.toString(),
             "Message forwarded to ${admin.name} ${admin.surname}"
         )
+        val chatIdResponse = sendMessageService.getSendMessage(message.chatId.toString(), message.chatId.toString())
 
         messageSender.forward(sender, forwardMessage)
+        messageSender.send(sender, chatIdResponse)
         messageSender.send(sender, userResponse)
 
     }
