@@ -34,6 +34,10 @@ public class Account {
     @ManyToMany(fetch = FetchType.LAZY)
     private Set<Department> departments;
 
+    @JoinColumn
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Issue current;
+
     public UUID getId() {
         return id;
     }

@@ -21,7 +21,7 @@ class MessageFindServiceImpl(
 
     override fun findById(id: UUID, graph: EntityGraph<Message>?): Message {
 
-        val query = em.createQuery("select m from message m where m.id = :id", Message::class.java)
+        val query = em.createQuery("select m from Message m where m.id = :id", Message::class.java)
             .setParameter("id", id)
 
         if (graph != null) {
@@ -40,12 +40,21 @@ class MessageFindServiceImpl(
         TODO("Not yet implemented")
     }
 
-    override fun findByIssueId(id: UUID): Set<Message> {
-        TODO("Not yet implemented")
+    override fun findByIssueId(id: UUID): List<Message> {
+        return findByIssueId(id, null)
     }
 
-    override fun findByIssueId(id: UUID, graph: EntityGraph<Message>?): Set<Message> {
-        TODO("Not yet implemented")
+    override fun findByIssueId(id: UUID, graph: EntityGraph<Message>?): List<Message> {
+
+        val query = em.createQuery("select m from Message m join m.issue i where i.id = :id", Message::class.java)
+            .setParameter("id", id)
+
+        if (graph != null) {
+            query.setHint(GType.LOAD, graph)
+        }
+
+        return query.resultList
+
     }
 
     override fun findByIssueAndAccountIds(issueId: UUID, accountId: UUID): Set<Message> {

@@ -30,4 +30,8 @@ interface IssueFindService {
 
     fun findByMessageId(id: UUID, graph: EntityGraph<Issue>?): Issue
 
+    fun findCurrentByAccountId(id: UUID): Issue
+
+    fun findCurrentByAccountId(id: UUID, graph: EntityGraph<Issue>?): Issue
+
 }

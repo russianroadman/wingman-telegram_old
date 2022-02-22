@@ -34,7 +34,7 @@ class MessageServiceImpl(
 
     }
 
-    override fun sentFromClient(messageId: UUID): Boolean {
+    override fun isSentFromClient(messageId: UUID): Boolean {
 
         val issue = issueFindService.findByMessageId(messageId)
         val messageAccount = accountFindService.findByMessageId(messageId)

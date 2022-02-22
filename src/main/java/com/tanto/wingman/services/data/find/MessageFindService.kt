@@ -14,9 +14,9 @@ interface MessageFindService {
 
     fun findByAccountId(id: UUID, graph: EntityGraph<Message>?): Set<Message>
 
-    fun findByIssueId(id: UUID): Set<Message>
+    fun findByIssueId(id: UUID): List<Message>
 
-    fun findByIssueId(id: UUID, graph: EntityGraph<Message>?): Set<Message>
+    fun findByIssueId(id: UUID, graph: EntityGraph<Message>?): List<Message>
 
     fun findByIssueAndAccountIds(issueId: UUID, accountId: UUID): Set<Message>
 

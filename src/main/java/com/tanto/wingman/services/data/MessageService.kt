@@ -7,6 +7,6 @@ interface MessageService {
 
     fun saveMessageFromTelegram(message: Message, issueId: UUID): com.tanto.wingman.data.entities.Message
 
-    fun sentFromClient(messageId: UUID): Boolean
+    fun isSentFromClient(messageId: UUID): Boolean
 
 }

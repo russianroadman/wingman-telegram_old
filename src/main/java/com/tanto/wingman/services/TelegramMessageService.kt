@@ -6,7 +6,7 @@ import org.telegram.telegrambots.meta.api.objects.Update
 /**
  * Service for processing incoming message from update
  */
-interface UpdateMessageService {
+interface TelegramMessageService {
 
     fun getMessage(update: Update): Message
 

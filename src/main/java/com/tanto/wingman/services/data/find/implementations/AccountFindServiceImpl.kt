@@ -62,7 +62,7 @@ class AccountFindServiceImpl(
 
     override fun findClientAccountByIssueId(id: UUID, graph: EntityGraph<Account>?): Account {
 
-        val query = em.createQuery("select c from issue i join i.client c where i.id = :id", Account::class.java)
+        val query = em.createQuery("select c from Issue i join i.client c where i.id = :id", Account::class.java)
             .setParameter("id", id)
 
         if (graph != null){
@@ -79,7 +79,7 @@ class AccountFindServiceImpl(
 
     override fun findEmployeeAccountByIssueId(id: UUID, graph: EntityGraph<Account>?): Account {
 
-        val query = em.createQuery("select e from issue i join i.employee e where e.id = :id", Account::class.java)
+        val query = em.createQuery("select e from Issue i join i.employee e where i.id = :id", Account::class.java)
             .setParameter("id", id)
 
         if (graph != null){
@@ -109,7 +109,7 @@ class AccountFindServiceImpl(
     override fun isExistsByChatId(chatId: String): Boolean {
         try {
             findByChatId(chatId)
-        } catch (e: EntityNotFoundException){
+        } catch (e: Exception){
             return false
         }
         return true
@@ -121,7 +121,7 @@ class AccountFindServiceImpl(
 
     override fun findByMessageId(id: UUID, graph: EntityGraph<Account>?): Account {
 
-        val query = em.createQuery("select a from message m join m.createdBy a where m.id = :id", Account::class.java)
+        val query = em.createQuery("select a from Message m join m.createdBy a where m.id = :id", Account::class.java)
             .setParameter("id", id)
 
         if (graph != null){
