@@ -5,4 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository
 import java.util.*
 
 interface IssueRepository : JpaRepository<Issue, UUID> {
+
+    fun findByCode(code: String): Issue
+
 }

@@ -29,7 +29,7 @@ class SendIssueMessageServiceImpl(
         val employee = accountFindService.findEmployeeAccountByIssueId(issue.id)
         val employeeChatId = employee.chatId
 
-        copy(employeeChatId, message, sender)
+        forward(employeeChatId, message, sender)
 
     }
 

@@ -16,7 +16,8 @@ class IssueFindServiceImpl(
 ) : IssueFindService {
 
     override fun findByCode(code: String): Issue {
-        TODO("Not yet implemented")
+        // todo
+        return repo.findByCode(code)
     }
 
     override fun findByCode(code: String, graph: EntityGraph<Issue>?): Issue {
@@ -24,10 +25,12 @@ class IssueFindServiceImpl(
     }
 
     override fun findById(id: UUID): Issue {
+        // todo
         return repo.findById(id).get()
     }
 
     override fun findById(id: UUID, graph: EntityGraph<Issue>?): Issue {
+        // todo
         return repo.findById(id).get()
     }
 

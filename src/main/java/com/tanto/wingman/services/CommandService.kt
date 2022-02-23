@@ -6,9 +6,7 @@ import org.telegram.telegrambots.meta.api.objects.MessageEntity
 
 interface CommandService {
 
-    fun getPureCommandFromEntity(e: MessageEntity): String
-
-    fun getCommandsFromMessage(message: Message): List<MessageEntity>
+    fun getCommandsFromMessage(message: Message): List<Command>
 
     fun getCommandFromMessage(message: Message): Command
 

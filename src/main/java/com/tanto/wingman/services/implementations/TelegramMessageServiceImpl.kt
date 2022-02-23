@@ -8,14 +8,6 @@ import org.telegram.telegrambots.meta.api.objects.Update
 @Service
 class TelegramMessageServiceImpl: TelegramMessageService {
 
-    override fun getMessage(update: Update): Message {
-        return update.message
-    }
-
-    override fun getChatId(message: Message): String {
-        return message.chatId.toString()
-    }
-
     override fun getSenderUsername(message: Message): String {
         return message.from.userName
     }
@@ -26,10 +18,6 @@ class TelegramMessageServiceImpl: TelegramMessageService {
 
     override fun getMessageTextOrBlank(message: Message): String {
         return if (message.hasText()) message.text else ""
-    }
-
-    override fun getMessageId(message: Message): Int {
-        return message.messageId
     }
 
 }

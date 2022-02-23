@@ -38,6 +38,9 @@ public class Account {
     @ManyToOne(fetch = FetchType.LAZY)
     private Issue current;
 
+    @Column
+    private Boolean isClient;
+
     public UUID getId() {
         return id;
     }
@@ -96,5 +99,21 @@ public class Account {
 
     public void setChatId(String chatId) {
         this.chatId = chatId;
+    }
+
+    public Issue getCurrent() {
+        return current;
+    }
+
+    public void setCurrent(Issue current) {
+        this.current = current;
+    }
+
+    public Boolean getClient() {
+        return isClient;
+    }
+
+    public void setClient(Boolean client) {
+        isClient = client;
     }
 }

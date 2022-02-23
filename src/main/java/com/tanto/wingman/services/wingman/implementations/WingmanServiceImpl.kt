@@ -17,7 +17,6 @@ class WingmanServiceImpl(
     private val issueFindService: IssueFindService,
     private val accountFindService: AccountFindService,
     private val messageService: MessageService,
-    private val telegramMessageService: TelegramMessageService,
     private val sendIssueMessageService: SendIssueMessageService
 ) : WingmanService {
 
@@ -27,10 +26,16 @@ class WingmanServiceImpl(
 
     override fun handleMessage(message: TgMessage, sender: AbsSender) {
 
-        val originalMessageChatId = telegramMessageService.getChatId(message)
+        val originalMessageChatId = message.chatId.toString()
         val senderAccount = accountFindService.findByChatId(originalMessageChatId)
         val issue = issueFindService.findCurrentByAccountId(senderAccount.id)
         val savedMessage = messageService.saveMessageFromTelegram(message, issue.id)
+
+        /*
+        * todo add check if receiver account current issue is this issue
+        *  otherwise do not send, just save message to database
+        */
+
 
         if (messageService.isSentFromClient(savedMessage.id)){
             sentFromClient(savedMessage, sender)
