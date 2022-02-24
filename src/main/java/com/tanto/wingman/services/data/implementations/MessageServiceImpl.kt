@@ -7,6 +7,7 @@ import com.tanto.wingman.services.data.find.IssueFindService
 import org.springframework.stereotype.Service
 import org.telegram.telegrambots.meta.api.objects.Message as TgMessage
 import com.tanto.wingman.data.entities.Message
+import org.slf4j.LoggerFactory
 import java.time.Instant
 import java.util.*
 
@@ -17,6 +18,8 @@ class MessageServiceImpl(
     private val issueFindService: IssueFindService,
     private val accountFindService: AccountFindService
 ) : MessageService {
+
+    private val log = LoggerFactory.getLogger(this.javaClass.name)
 
     override fun saveMessageFromTelegram(message: TgMessage, issueId: UUID): Message {
 
@@ -46,6 +49,11 @@ class MessageServiceImpl(
 
         return false
 
+    }
+
+    override fun readMessageById(messageId: UUID) {
+        // todo
+        log.info("message considered read")
     }
 
 }

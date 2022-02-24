@@ -19,4 +19,6 @@ interface TelegramMessageSenderService {
 
     fun copy(sender: AbsSender, copyMessage: CopyMessage)
 
+    fun sendAny(sender: AbsSender, message: BotApiMethod<BotApiObject>)
+
 }

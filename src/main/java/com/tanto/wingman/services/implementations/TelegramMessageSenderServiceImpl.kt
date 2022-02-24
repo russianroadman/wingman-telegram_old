@@ -25,4 +25,8 @@ class TelegramMessageSenderServiceImpl : TelegramMessageSenderService {
         sender.execute(copyMessage)
     }
 
+    override fun sendAny(sender: AbsSender, message: BotApiMethod<BotApiObject>) {
+        sender.execute(message)
+    }
+
 }

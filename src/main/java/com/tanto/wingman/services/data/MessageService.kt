@@ -9,4 +9,6 @@ interface MessageService {
 
     fun isSentFromClient(messageId: UUID): Boolean
 
+    fun readMessageById(messageId: UUID)
+
 }
