@@ -8,6 +8,7 @@ import com.tanto.wingman.services.SendMessageFactory
 import com.tanto.wingman.services.TelegramMessageSenderService
 import com.tanto.wingman.services.data.find.AccountFindService
 import com.tanto.wingman.services.data.find.IssueFindService
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import org.telegram.telegrambots.meta.api.objects.Message as TgMessage
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton
@@ -22,6 +23,8 @@ class CommandHandlerImpl(
     private val keyboardFactoryImpl: SendMessageWithKeyboardFactoryImpl,
     private val senderService: TelegramMessageSenderService
 ) : CommandHandler {
+
+    private val log = LoggerFactory.getLogger(this.javaClass.name)
 
     override fun handle(message: TgMessage, sender: AbsSender) {
 
@@ -59,11 +62,7 @@ class CommandHandlerImpl(
 
         val buttons = listOf(
             issueCodes.map {
-                InlineKeyboardButton
-                    .builder()
-                    .text(it)
-                    .callbackData("${Command.ISSUES}:$it")
-                    .build()
+                getInlineKeyboardButtonWithLog(it)
             }
         )
         val messageToSendWithKeyboard = keyboardFactoryImpl.add(messageToSend, buttons)
@@ -78,11 +77,7 @@ class CommandHandlerImpl(
 
         val buttons = listOf(
             issueCodes.map {
-                InlineKeyboardButton
-                    .builder()
-                    .text(it)
-                    .callbackData("${Command.ISSUES}:$it")
-                    .build()
+                getInlineKeyboardButtonWithLog(it)
             }
         )
         val messageToSendWithKeyboard = keyboardFactoryImpl.add(messageToSend, buttons)
@@ -91,7 +86,15 @@ class CommandHandlerImpl(
     }
 
     private fun start(){
-        TODO()
+        log.info("someone tried to use /start")
+    }
+
+    private fun getInlineKeyboardButtonWithLog(issueCode: String): InlineKeyboardButton {
+        return InlineKeyboardButton
+            .builder()
+            .text(issueCode)
+            .callbackData("${Command.ISSUES}:$issueCode")
+            .build()
     }
 
 }

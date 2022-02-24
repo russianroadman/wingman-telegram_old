@@ -10,6 +10,7 @@ import com.tanto.wingman.services.data.find.IssueFindService
 import com.tanto.wingman.services.data.find.MessageFindService
 import com.tanto.wingman.utils.TelegramMessagesUtils.getCallbackResult
 import com.tanto.wingman.utils.Utils.getCommand
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery
 import org.telegram.telegrambots.meta.api.objects.Message
@@ -25,7 +26,11 @@ class CallbackQueryHandlerImpl(
     private val messageFactory: SendMessageFactory
 ) : CallbackQueryHandler {
 
+    private val log = LoggerFactory.getLogger(this.javaClass.name)
+
     override fun handle(query: CallbackQuery, sender: AbsSender) {
+
+        log.info("Handling CallbackQuery, data is {${query.data}}")
 
         val result = getCallbackResult(query)
         val command = getCommand(result.first)
@@ -47,14 +52,25 @@ class CallbackQueryHandlerImpl(
         val messages = messageFindService.findByIssueId(issue.id)
 
         messages.forEach {
-            senderService.forward(
-                sender,
-                messageFactory.getForwardMessage(
-                    message.chatId.toString(),
-                    it.chatId,
-                    it.telegramMessageId
+            if (it.chatId == account.chatId){
+                senderService.forward(
+                    sender,
+                    messageFactory.getForwardMessage(
+                        message.chatId.toString(),
+                        it.chatId,
+                        it.telegramMessageId
+                    )
                 )
-            )
+            } else {
+                senderService.copy(
+                    sender,
+                    messageFactory.getCopyMessage(
+                        message.chatId.toString(),
+                        it.chatId,
+                        it.telegramMessageId
+                    )
+                )
+            }
         }
 
     }

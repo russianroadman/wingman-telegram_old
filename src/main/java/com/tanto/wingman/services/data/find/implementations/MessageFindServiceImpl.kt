@@ -46,14 +46,20 @@ class MessageFindServiceImpl(
 
     override fun findByIssueId(id: UUID, graph: EntityGraph<Message>?): List<Message> {
 
-        val query = em.createQuery("select m from Message m join m.issue i where i.id = :id", Message::class.java)
+        // todo move limit to config
+
+        val query = em.createQuery(
+            "select m from Message m join m.issue i where i.id = :id order by m.createdAt desc",
+            Message::class.java
+        )
             .setParameter("id", id)
+            .setMaxResults(10)
 
         if (graph != null) {
             query.setHint(GType.LOAD, graph)
         }
 
-        return query.resultList
+        return query.resultList.sortedBy { it.createdAt }
 
     }
 

@@ -32,8 +32,8 @@ object TelegramMessagesUtils {
 
         if (split.size != 2) {
             throw IllegalStateException(
-                "Invalid callback data, couldn't split in two with delimiter ${Constraints.CALLBACK_QUERY_DELIMITER}" +
-                        ": ${query.data}"
+                "Invalid callback data, couldn't split in two with delimiter {${Constraints.CALLBACK_QUERY_DELIMITER}}" +
+                        " data was: {${query.data}}"
             )
         }
 

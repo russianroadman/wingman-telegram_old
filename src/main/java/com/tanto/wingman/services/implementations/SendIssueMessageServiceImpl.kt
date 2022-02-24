@@ -61,13 +61,9 @@ class SendIssueMessageServiceImpl(
         val client = accountFindService.findClientAccountByIssueId(issueId)
         val clientChatId = client.chatId
 
-        messages
-            .sortedBy {
-                it.createdAt
-            }
-            .forEach {
-                forward(clientChatId, it, sender)
-            }
+        messages.forEach {
+            forward(clientChatId, it, sender)
+        }
 
     }
 
@@ -77,13 +73,9 @@ class SendIssueMessageServiceImpl(
         val employee = accountFindService.findEmployeeAccountByIssueId(issueId)
         val employeeChatId = employee.chatId
 
-        messages
-            .sortedBy {
-                it.createdAt
-            }
-            .forEach {
-                forward(employeeChatId, it, sender)
-            }
+        messages.forEach {
+            forward(employeeChatId, it, sender)
+        }
 
     }
 

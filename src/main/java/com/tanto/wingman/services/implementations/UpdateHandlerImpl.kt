@@ -2,7 +2,7 @@ package com.tanto.wingman.services.implementations
 
 import com.tanto.wingman.services.*
 import com.tanto.wingman.services.data.find.AccountFindService
-import com.tanto.wingman.services.wingman.WingmanService
+import com.tanto.wingman.services.MessageHandler
 import com.tanto.wingman.utils.TelegramMessagesUtils.getMessage
 import com.tanto.wingman.utils.TelegramMessagesUtils.messageHasCommand
 import org.slf4j.LoggerFactory
@@ -19,7 +19,7 @@ class UpdateHandlerImpl(
     private val telegramMessageSenderService: TelegramMessageSenderService,
     private val accountFindService: AccountFindService,
     private val commandHandler: CommandHandler,
-    private val wingmanService: WingmanService,
+    private val messageHandler: MessageHandler,
     private val callbackQueryHandler: CallbackQueryHandler
 ) : UpdateHandler {
 
@@ -69,7 +69,7 @@ class UpdateHandlerImpl(
     }
 
     private fun handleMessage(message: Message, sender: AbsSender){
-        wingmanService.handleMessage(message, sender)
+        messageHandler.handleMessage(message, sender)
     }
 
     private fun handleCallbackQuery(callbackQuery: CallbackQuery, sender: AbsSender){
