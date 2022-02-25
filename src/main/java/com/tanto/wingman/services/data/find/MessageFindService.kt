@@ -26,4 +26,8 @@ interface MessageFindService {
 
     fun findLatestByIssueId(id: UUID, graph: EntityGraph<Message>?): Message
 
+    fun findByTelegramMessageId(id: Int): Message
+
+    fun findByTelegramMessageId(id: Int, graph: EntityGraph<Message>?): Message
+
 }

@@ -53,7 +53,7 @@ class MessageFindServiceImpl(
             Message::class.java
         )
             .setParameter("id", id)
-            .setMaxResults(10)
+//            .setMaxResults(10)
 
         if (graph != null) {
             query.setHint(GType.LOAD, graph)
@@ -77,5 +77,13 @@ class MessageFindServiceImpl(
 
     override fun findLatestByIssueId(id: UUID, graph: EntityGraph<Message>?): Message {
         TODO("Not yet implemented")
+    }
+
+    override fun findByTelegramMessageId(id: Int): Message {
+        return findByTelegramMessageId(id, null)
+    }
+
+    override fun findByTelegramMessageId(id: Int, graph: EntityGraph<Message>?): Message {
+        return repo.findByTelegramMessageId(id)
     }
 }

@@ -23,4 +23,8 @@ object Utils {
         throw IllegalArgumentException("Command received but not recognized: {$string}")
     }
 
+    fun getDecoratedIssueName(text: String): String {
+        return text+"\uD83D\uDCAC"
+    }
+
 }

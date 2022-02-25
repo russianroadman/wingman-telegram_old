@@ -32,6 +32,9 @@ public class Message {
     @Column(nullable = false, updatable = false)
     private Integer telegramMessageId;
 
+    @Column(nullable = false)
+    private Boolean readByReceiver;
+
     public UUID getId() {
         return id;
     }
@@ -74,5 +77,13 @@ public class Message {
 
     public void setTelegramMessageId(Integer messageId) {
         this.telegramMessageId = messageId;
+    }
+
+    public Boolean getReadByReceiver() {
+        return readByReceiver;
+    }
+
+    public void setReadByReceiver(Boolean readByReceiver) {
+        this.readByReceiver = readByReceiver;
     }
 }

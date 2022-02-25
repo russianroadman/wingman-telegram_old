@@ -10,8 +10,10 @@ import com.tanto.wingman.services.data.find.IssueFindService
 import com.tanto.wingman.services.data.find.MessageFindService
 import com.tanto.wingman.utils.TelegramMessagesUtils.getCallbackResult
 import com.tanto.wingman.utils.Utils.getCommand
+import com.tanto.wingman.utils.Utils.getDecoratedIssueName
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery
 import org.telegram.telegrambots.meta.api.objects.Message
 import org.telegram.telegrambots.meta.bots.AbsSender
@@ -50,6 +52,8 @@ class CallbackQueryHandlerImpl(
         val account = accountFindService.findByChatId(message.chatId.toString())
         accountService.setCurrentIssue(account, issue)
         val messages = messageFindService.findByIssueId(issue.id)
+
+        senderService.send(sender, SendMessage(message.chatId.toString(), getDecoratedIssueName(issue.code)), null)
 
         messages.forEach {
             if (it.chatId == account.chatId){

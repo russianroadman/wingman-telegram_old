@@ -1,17 +1,14 @@
 package com.tanto.wingman.services.implementations
 
-import com.tanto.wingman.data.entities.Issue
 import com.tanto.wingman.data.entities.Message
-import com.tanto.wingman.services.SendMessageFactory
 import com.tanto.wingman.services.SendIssueMessageService
+import com.tanto.wingman.services.SendMessageFactory
 import com.tanto.wingman.services.TelegramMessageSenderService
 import com.tanto.wingman.services.data.MessageService
 import com.tanto.wingman.services.data.find.AccountFindService
 import com.tanto.wingman.services.data.find.IssueFindService
 import com.tanto.wingman.services.data.find.MessageFindService
 import org.springframework.stereotype.Service
-import org.telegram.telegrambots.meta.api.interfaces.BotApiObject
-import org.telegram.telegrambots.meta.api.methods.BotApiMethod
 import org.telegram.telegrambots.meta.bots.AbsSender
 import java.util.*
 
@@ -83,26 +80,21 @@ class SendIssueMessageServiceImpl(
 
     }
 
-    private fun send(chatId: String, message: Message, text: String, sender: AbsSender){
+    private fun send(chatId: String, message: Message, text: String, sender: AbsSender, originalChatId: Int?){
         val messageToSend = sendMessageFactory.getSendMessage(chatId, text)
-        sendMessageAndReadByReceiver(message, messageToSend as BotApiMethod<BotApiObject>, sender)
+        telegramMessageSenderService.send(sender, messageToSend, originalChatId)
     }
 
     private fun forward(chatId: String, message: Message, sender: AbsSender){
         val messageToForward = sendMessageFactory
             .getForwardMessage(chatId, message.chatId, message.telegramMessageId)
-        sendMessageAndReadByReceiver(message, messageToForward as BotApiMethod<BotApiObject>, sender)
+        telegramMessageSenderService.forward(sender, messageToForward)
     }
 
     private fun copy(chatId: String, message: Message, sender: AbsSender){
         val messageToCopy = sendMessageFactory
             .getCopyMessage(chatId, message.chatId, message.telegramMessageId)
-        sendMessageAndReadByReceiver(message, messageToCopy as BotApiMethod<BotApiObject>, sender)
-    }
-
-    private fun sendMessageAndReadByReceiver(message: Message, tgMessage: BotApiMethod<BotApiObject>, sender: AbsSender){
-        telegramMessageSenderService.sendAny(sender, tgMessage)
-        messageService.readMessageById(message.id)
+        telegramMessageSenderService.copy(sender, messageToCopy)
     }
 
 }

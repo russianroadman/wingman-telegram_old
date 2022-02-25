@@ -61,7 +61,7 @@ class UpdateHandlerImpl(
             message.chatId.toString(),
             "Вы не зарегистрированы"
         )
-        telegramMessageSenderService.send(sender, messageToSend)
+        telegramMessageSenderService.send(sender, messageToSend, null)
     }
 
     private fun handleCommand(message: Message, sender: AbsSender){

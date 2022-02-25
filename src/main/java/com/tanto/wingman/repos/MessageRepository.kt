@@ -10,4 +10,8 @@ interface MessageRepository : JpaRepository<Message, UUID> {
 
     fun countByIssueId(issueId: UUID): Long
 
+    fun countByIssueIdAndReadByReceiverIsFalse(issueId: UUID): Long
+
+    fun findByTelegramMessageId(id: Int): Message
+
 }
