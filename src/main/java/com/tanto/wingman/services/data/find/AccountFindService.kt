@@ -34,9 +34,9 @@ interface AccountFindService {
 
     fun findEmployeeAccountByIssueId(id: UUID, graph: EntityGraph<Account>?): Account
 
-    fun findByDepartmentId(id: UUID): Set<Account>
+    fun findByDepartmentId(id: UUID): List<Account>
 
-    fun findByDepartmentId(id: UUID, graph: EntityGraph<Account>): Set<Account>
+    fun findByDepartmentId(id: UUID, graph: EntityGraph<Account>?): List<Account>
 
     fun findByChatId(chatId: String): Account
 

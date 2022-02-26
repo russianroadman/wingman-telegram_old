@@ -1,5 +1,6 @@
 package com.tanto.wingman.services.implementations
 
+import com.tanto.wingman.data.Command
 import com.tanto.wingman.data.entities.Account
 import com.tanto.wingman.data.entities.Issue
 import com.tanto.wingman.data.entities.Message
@@ -9,8 +10,12 @@ import com.tanto.wingman.services.data.MessageService
 import com.tanto.wingman.services.data.find.AccountFindService
 import com.tanto.wingman.services.data.find.IssueFindService
 import com.tanto.wingman.services.MessageHandler
+import com.tanto.wingman.services.TelegramMessageSenderService
+import com.tanto.wingman.services.data.AccountService
+import com.tanto.wingman.services.data.implementations.IssueFactoryCacheServiceImpl
 import com.tanto.wingman.utils.TelegramMessagesUtils
 import org.springframework.stereotype.Service
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.objects.Message as TgMessage
 import org.telegram.telegrambots.meta.bots.AbsSender
 import javax.persistence.NoResultException
@@ -21,7 +26,10 @@ class MessageHandlerImpl(
     private val accountFindService: AccountFindService,
     private val messageService: MessageService,
     private val sendIssueMessageService: SendIssueMessageService,
-    private val keyboardMessageSender: KeyboardMessageSender
+    private val keyboardMessageSender: KeyboardMessageSender,
+    private val issueFactoryCacheServiceImpl: IssueFactoryCacheServiceImpl,
+    private val messageSenderService: TelegramMessageSenderService,
+    private val accountService: AccountService
 ) : MessageHandler {
 
     override fun handleMessage(message: TgMessage, sender: AbsSender) {
@@ -29,15 +37,31 @@ class MessageHandlerImpl(
         val originalMessageChatId = message.chatId.toString()
         val senderAccount = accountFindService.findByChatId(originalMessageChatId)
 
-        val issue = findIssueOrSendIssuesMenu(senderAccount, sender)
-
-        val savedMessage = messageService.saveMessageFromTelegram(message, issue.id)
-
-        if (messageService.isSentFromClient(savedMessage.id)){
-            sentFromClient(savedMessage, sender)
+        if (issueFactoryCacheServiceImpl.contains(senderAccount)){
+            handleCommandMessage(message, senderAccount, sender)
         } else {
-            sentFromEmployee(savedMessage, sender)
+            val issue = findIssueOrSendIssuesMenu(senderAccount, sender)
+
+            val savedMessage = messageService.saveMessageFromTelegram(message, issue.id)
+
+            if (messageService.isSentFromClient(savedMessage.id)){
+                sentFromClient(savedMessage, sender)
+            } else {
+                sentFromEmployee(savedMessage, sender)
+            }
         }
+
+    }
+
+    private fun handleCommandMessage(message: TgMessage, senderAccount: Account, sender: AbsSender) {
+
+        // todo !!! there can be any command dialog
+        issueFactoryCacheServiceImpl.fillNextStep(senderAccount, message.text)
+
+        val issue = issueFactoryCacheServiceImpl.getReadyObject(senderAccount)
+
+        messageSenderService.send(sender, SendMessage(message.chatId.toString(), "Обращение '${issue.code}' успешно создано"), null)
+        accountService.setCurrentIssue(senderAccount, issue)
 
     }
 
@@ -46,7 +70,7 @@ class MessageHandlerImpl(
         val issue = issueFindService.findByMessageId(message.id)
         val employee = accountFindService.findEmployeeAccountByIssueId(issue.id)
 
-        // todo exceptions when employee current issue is null
+        // todo exceptions are thrown when employee current issue is null
         val currentEmployeeIssue = issueFindService.findCurrentByAccountId(employee.id)
 
         if (currentEmployeeIssue.id == issue.id){

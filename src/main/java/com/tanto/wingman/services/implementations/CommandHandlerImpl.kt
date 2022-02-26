@@ -6,6 +6,7 @@ import com.tanto.wingman.services.CommandHandler
 import com.tanto.wingman.services.CommandService
 import com.tanto.wingman.services.KeyboardMessageSender
 import com.tanto.wingman.services.data.find.AccountFindService
+import com.tanto.wingman.services.data.implementations.IssueFactoryCacheServiceImpl
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import org.telegram.telegrambots.meta.bots.AbsSender
@@ -16,7 +17,8 @@ import org.telegram.telegrambots.meta.api.objects.Message as TgMessage
 class CommandHandlerImpl(
     private val commandService: CommandService,
     private val accountFindService: AccountFindService,
-    private val keyboardMessageSender: KeyboardMessageSender
+    private val keyboardMessageSender: KeyboardMessageSender,
+    private val issueFactoryCacheServiceImpl: IssueFactoryCacheServiceImpl
 ) : CommandHandler {
 
     private val log = LoggerFactory.getLogger(this.javaClass.name)
@@ -38,7 +40,7 @@ class CommandHandlerImpl(
         when (commandService.getCommandFromMessage(tgMessage)) {
             Command.ISSUES -> clientIssues(senderAccount, sender)
             Command.START -> start()
-            else -> {}
+            Command.ISSUE -> newIssueFromClient(senderAccount, sender)
         }
     }
 
@@ -46,7 +48,13 @@ class CommandHandlerImpl(
         when (commandService.getCommandFromMessage(tgMessage)) {
             Command.ISSUES -> employeeIssues(senderAccount, sender)
             Command.START -> start()
-            else -> {}
+            Command.ISSUE -> {
+                log.info("Employee ${senderAccount.name} ${senderAccount.surname} tried to create issue")
+            }
+//            else -> {
+//                log.info("Employee ${senderAccount.name} ${senderAccount.surname} used command " +
+//                        "${commandService.getCommandFromMessage(tgMessage)} that is not currently supported")
+//            }
         }
     }
 
@@ -56,6 +64,11 @@ class CommandHandlerImpl(
 
     private fun employeeIssues(senderAccount: Account, sender: AbsSender){
         keyboardMessageSender.sendIssuesListToEmployeeChat(senderAccount, sender)
+    }
+
+    private fun newIssueFromClient(senderAccount: Account, sender: AbsSender){
+        issueFactoryCacheServiceImpl.putAccountToCacheWithCommand(senderAccount, Command.ISSUE)
+        keyboardMessageSender.sendChooseDepartmentDialogToChat(senderAccount, sender)
     }
 
     private fun start(){

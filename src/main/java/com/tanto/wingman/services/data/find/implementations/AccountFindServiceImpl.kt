@@ -90,12 +90,19 @@ class AccountFindServiceImpl(
 
     }
 
-    override fun findByDepartmentId(id: UUID): Set<Account> {
-        TODO("Not yet implemented")
+    override fun findByDepartmentId(id: UUID): List<Account> {
+        return findByDepartmentId(id, null)
     }
 
-    override fun findByDepartmentId(id: UUID, graph: EntityGraph<Account>): Set<Account> {
-        TODO("Not yet implemented")
+    override fun findByDepartmentId(id: UUID, graph: EntityGraph<Account>?): List<Account> {
+        val query = em.createQuery("select a from Account a join a.departments d where d.id = :id", Account::class.java)
+            .setParameter("id", id)
+
+        if (graph != null){
+            query.setHint(GType.LOAD, graph)
+        }
+
+        return query.resultList
     }
 
     override fun findByChatId(chatId: String): Account {

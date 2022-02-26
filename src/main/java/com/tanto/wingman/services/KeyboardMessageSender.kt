@@ -5,12 +5,16 @@ import org.telegram.telegrambots.meta.bots.AbsSender
 
 interface KeyboardMessageSender {
 
-    fun sendIssuesListToClientChat(chatId: String, sender: AbsSender)
+    fun sendIssuesListToClientChat(clientChatId: String, sender: AbsSender)
 
-    fun sendIssuesListToClientChat(account: Account, sender: AbsSender)
+    fun sendIssuesListToClientChat(client: Account, sender: AbsSender)
 
-    fun sendIssuesListToEmployeeChat(chatId: String, sender: AbsSender)
+    fun sendIssuesListToEmployeeChat(employeeChatId: String, sender: AbsSender)
 
-    fun sendIssuesListToEmployeeChat(account: Account, sender: AbsSender)
+    fun sendIssuesListToEmployeeChat(employee: Account, sender: AbsSender)
+
+    fun sendChooseDepartmentDialogToChat(chatId: String, sender: AbsSender)
+
+    fun sendChooseDepartmentDialogToChat(account: Account, sender: AbsSender)
 
 }

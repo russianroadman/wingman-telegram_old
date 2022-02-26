@@ -1,9 +1,15 @@
 package com.tanto.wingman.services.data
 
 import com.tanto.wingman.data.IssueStatus
+import com.tanto.wingman.data.entities.Account
+import com.tanto.wingman.data.entities.Department
+import com.tanto.wingman.data.entities.Issue
+import org.telegram.telegrambots.meta.api.objects.Message
 import java.util.*
 
 interface IssueService {
+
+    fun create(department: Department, name: String, client: Account): Issue
 
     fun assignToEmployee(issueId: UUID, accountId: UUID)
 

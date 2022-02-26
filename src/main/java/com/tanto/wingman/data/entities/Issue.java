@@ -15,7 +15,7 @@ public class Issue {
     @GeneratedValue
     private UUID id;
 
-    @Column(unique = true, nullable = false, updatable = false, length = 10)
+    @Column(unique = true, nullable = false, updatable = false, length = 15)
     private String code;
 
     @Column(nullable = false, updatable = false)

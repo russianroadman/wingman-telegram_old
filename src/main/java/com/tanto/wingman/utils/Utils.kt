@@ -1,5 +1,6 @@
 package com.tanto.wingman.utils
 
+import com.tanto.wingman.data.CallbackCode
 import com.tanto.wingman.data.Command
 import org.slf4j.LoggerFactory
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder
@@ -23,8 +24,11 @@ object Utils {
         throw IllegalArgumentException("Command received but not recognized: {$string}")
     }
 
-    fun getDecoratedIssueName(text: String): String {
-        return text+"\uD83D\uDCAC"
+    fun getCallbackCode(string: String): CallbackCode {
+        if (CallbackCode.values().map{it.toString()}.contains(string.uppercase())){
+            return CallbackCode.valueOf(string.uppercase())
+        }
+        throw IllegalArgumentException("CallbackCode received but not recognized: {$string}")
     }
 
 }
