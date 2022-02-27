@@ -83,6 +83,8 @@ class MessageHandlerImpl(
 
         val issue = issueFindService.findByMessageId(message.id)
         val client = accountFindService.findClientAccountByIssueId(issue.id)
+
+        // todo exceptions are thrown when client current issue is null
         val currentClientIssue = issueFindService.findCurrentByAccountId(client.id)
 
         if (currentClientIssue.id == issue.id){

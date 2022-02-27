@@ -8,5 +8,6 @@ object AppConstants {
     const val PARSE_MODE_MARKDOWN = ParseMode.MARKDOWN
     const val CHOOSE_ISSUE = "Выберите обращение из списка"
     const val YOU_HAVE_UNREAD_MESSAGES = "У вас есть непрочитанные сообщения"
+    const val CRON_EVERY_30_MIN = "0 0/30 * * * ?"
 
 }

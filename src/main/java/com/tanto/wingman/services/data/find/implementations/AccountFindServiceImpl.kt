@@ -105,6 +105,36 @@ class AccountFindServiceImpl(
         return query.resultList
     }
 
+    override fun findEmployeesInDepartment(id: UUID): List<Account> {
+        return findEmployeesInDepartment(id, null)
+    }
+
+    override fun findEmployeesInDepartment(id: UUID, graph: EntityGraph<Account>?): List<Account> {
+        val query = em.createQuery("select a from Account a join a.departments d where a.isClient = false and d.id = :id", Account::class.java)
+            .setParameter("id", id)
+
+        if (graph != null){
+            query.setHint(GType.LOAD, graph)
+        }
+
+        return query.resultList
+    }
+
+    override fun findClientsInDepartment(id: UUID): List<Account> {
+        return findClientsInDepartment(id, null)
+    }
+
+    override fun findClientsInDepartment(id: UUID, graph: EntityGraph<Account>?): List<Account> {
+        val query = em.createQuery("select a from Account a join a.departments d where a.isClient = true and d.id = :id", Account::class.java)
+            .setParameter("id", id)
+
+        if (graph != null){
+            query.setHint(GType.LOAD, graph)
+        }
+
+        return query.resultList
+    }
+
     override fun findByChatId(chatId: String): Account {
         return findByChatId(chatId, null)
     }

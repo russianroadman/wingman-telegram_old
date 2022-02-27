@@ -32,7 +32,7 @@ class IssueServiceImpl(
         issue.createdAt = Date.from(instant)
         issue.acceptedAt = Date.from(instant)
         issue.client = client
-        issue.employee = accountFindService.findByDepartmentId(department.id).first()
+        issue.employee = accountFindService.findEmployeesInDepartment(department.id).first()
         issue.status = IssueStatus.IN_PROGRESS
         issue.closedAt = null
 

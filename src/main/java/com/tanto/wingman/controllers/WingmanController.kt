@@ -3,6 +3,7 @@ package com.tanto.wingman.controllers
 import com.tanto.wingman.services.BotProvider
 import com.tanto.wingman.services.BotSessionService
 import com.tanto.wingman.services.data.AccountService
+import com.tanto.wingman.utils.AppConstants
 import com.tanto.wingman.utils.Utils
 import org.springframework.http.HttpStatus
 import org.springframework.scheduling.annotation.Scheduled
@@ -44,7 +45,7 @@ class WingmanController(
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/informAllUnreadMessages")
-//    @Scheduled(cron = "0 * * * * *")
+    @Scheduled(cron = AppConstants.CRON_EVERY_30_MIN)
     fun informAllUnreadMessages(){
         accountService.informEveryoneAboutNewMessages(botProvider.getBot())
     }
