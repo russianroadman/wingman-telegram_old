@@ -85,7 +85,7 @@ object TelegramMessagesUtils {
     }
 
     fun bold(text: String): String {
-        return "<b>${text}</b>"
+        return "**${text}**"
     }
 
     fun italic(text: String): String {

@@ -4,17 +4,11 @@ import com.tanto.wingman.data.Bot
 import com.tanto.wingman.data.entities.Account
 import com.tanto.wingman.data.entities.Issue
 import com.tanto.wingman.repos.AccountRepository
-import com.tanto.wingman.repos.MessageRepository
-import com.tanto.wingman.services.TelegramMessageSenderService
 import com.tanto.wingman.services.data.AccountService
 import com.tanto.wingman.services.data.find.AccountFindService
 import com.tanto.wingman.services.data.find.IssueFindService
-import com.tanto.wingman.utils.AppConstants
-import com.tanto.wingman.utils.AppConstants.YOU_HAVE_UNREAD_MESSAGES
-import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
-import org.telegram.telegrambots.meta.bots.AbsSender
 import java.util.*
 
 @Service
