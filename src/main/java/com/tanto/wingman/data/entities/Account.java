@@ -41,6 +41,10 @@ public class Account {
     @Column
     private Boolean isClient;
 
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
     public UUID getId() {
         return id;
     }

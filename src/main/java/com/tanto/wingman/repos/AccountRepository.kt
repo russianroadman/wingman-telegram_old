@@ -26,5 +26,8 @@ interface AccountRepository : JpaRepository<Account, UUID> {
             "and :id in (i.client_id, i.employee_id)")
     fun countUnread(id: UUID): Long
 
+    @Query(value = "select a from Account a where a.login = 'admin'")
+    fun getAdmin(): Account
+
 
 }
