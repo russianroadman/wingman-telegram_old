@@ -1,3 +1,3 @@
 # wingman
 
-## support service via telegram
+Telegram bot for support service 
